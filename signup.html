@@ -1,1 +1,162 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Form Validation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: #090303;
+            display: flex;
+            min-height: 100vh;
+            background-image: url(images/bag.jpg);
+            background-attachment: fixed;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center relative">
+    <img alt="A beautiful background image of soft pink and lavender flowers" class="absolute inset-0 w-full h-full object-cover z-0" height="1080" src="https://storage.googleapis.com/a1aa/image/B17J9YktAnaSBpztNr2EtRQnl77ykej12wg2Ceviw5ZHYfsnA.jpg" width="1920"/>
+    <div class="w-full max-w-md bg-white bg-opacity-80 p-8 rounded-lg shadow-lg z-10">
+        <h1 class="text-2xl font-bold mb-6 text-center">Sign Up</h1>
+        <div id="error-message" class="text-red-500 mb-4"></div>
+        <div id="success-message" class="text-pink-500 mb-4"></div>
+        <form id="form">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="firstname-input">Name</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="firstname-input" placeholder="Enter your first name" required type="text"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email-input">Email</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email-input" placeholder="Enter your email" required type="email"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password-input">Password</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password-input" placeholder="Enter your password" required type="password"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="repeat-password-input">Repeat Password</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="repeat-password-input" placeholder="Confirm your password" required type="password"/>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="profile-picture-input">Profile Picture</label>
+                <input accept="image /* Accept image files only */
+                class="shadow appearance-noneborder rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="profile-picture-input" required type="file"/>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Signup</button>
+            </div>
+        </form>
+        <p class="mt-4">Already have an Account? <a class="text-pink-500 hover:text-pink-700" href="http://127.0.0.1:5000/login">Login here</a></p>
+    </div>
+  
+    <script>
+        const form = document.getElementById('form');
+        const firstnameInput = document.getElementById('firstname-input');
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('password-input');
+        const repeatPasswordInput = document.getElementById('repeat-password-input');
+        const profilePictureInput = document.getElementById('profile-picture-input');
+        const errorMessage = document.getElementById('error-message');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            const errors = [];
+
+            // First name validation
+            if (firstnameInput.value.trim() === '') {
+                errors.push('First name is required');
+                firstnameInput.parentElement.classList.add('incorrect'); // Add error class
+            } else {
+                firstnameInput.parentElement.classList.remove('incorrect'); // Remove error class if valid
+            }
+
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailInput.value)) {
+                errors.push('Invalid email format');
+                emailInput.parentElement.classList.add('incorrect'); // Add error class
+            } else {
+                emailInput.parentElement.classList.remove('incorrect'); // Remove error class if valid
+            }
+
+            // Check if email already exists
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(user => user.email === emailInput.value)) {
+                errors.push('Email already exists');
+                emailInput.parentElement.classList.add('incorrect'); // Add error class
+            } else {
+                emailInput.parentElement.classList.remove('incorrect'); // Remove error class if valid
+            }
+
+            // Password length validation
+            if (passwordInput.value.length < 8) {
+                errors.push('Password must have at least 8 characters');
+                passwordInput.parentElement.classList.add('incorrect'); // Add error class
+            } else {
+                passwordInput.parentElement.classList.remove('incorrect'); // Remove error class if valid
+            }
+
+            // Password match validation
+            if (passwordInput.value !== repeatPasswordInput.value) {
+                errors.push('Passwords do not match');
+                repeatPasswordInput.parentElement.classList.add('incorrect'); // Add error class
+            } else {
+                repeatPasswordInput.parentElement.classList.remove('incorrect'); // Remove error class if valid
+            }
+
+           
+            if (profilePictureInput.files.length === 0) {
+                errors.push('Profile picture is required');
+                profilePictureInput.parentElement.classList.add('incorrect'); // Add error class
+            } else {
+                profilePictureInput.parentElement.classList.remove('incorrect'); // Remove error class if valid
+            }
+
+            // Display errors
+            if (errors.length > 0) {
+                errorMessage.innerHTML = errors.join('<br>'); // Show error messages
+                successMessage.innerHTML = ''; // Clear success message
+            } else {
+                errorMessage.innerHTML = ''; // Clear error messages
+                successMessage.innerHTML = 'Signup successful! Redirecting to login page...'; // Show success message
+                
+                // Save user data to local storage
+                users.push({ name: firstnameInput.value, email: emailInput.value, password: passwordInput.value });
+                localStorage.setItem('users', JSON.stringify(users));
+
+                const file = profilePictureInput.files[0];
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    localStorage.setItem('profilePicture', reader.result);
+                    // Redirect to login page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href ="http://127.0.0.1:5000/login"; // Redirect to login page
+                    }, 3000);
+                };
+                if (file) {
+                    reader.readAsDataURL(file); 
+                }
+            }
+        });
+        function saveUserData(name, profilePicture) {
+    localStorage.setItem('userName', name);
+    localStorage.setItem('profilePicture', profilePicture);
+}
+    </script>
+</body>
+</html>
