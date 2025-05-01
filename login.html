@@ -1,1 +1,91 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #470e45, #765691, #3d0a3d);
+
+            animation: gradientAnimation 10s ease infinite;
+            color: #090303;
+            display: flex;
+            min-height: 100vh;
+            background-image: url(images/image7.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .incorrect {
+            border-color: red; /* Change border color to red for incorrect input */
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center relative">
+    <div class="w-full max-w-md bg-#765691 bg-opacity-80 p-8 rounded-lg shadow-lg z-10">
+        <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
+        <div id="error-message" class="text-red-500 mb-4"></div>
+        <div id="success-message" class="text-pink-500 mb-4"></div>
+        <form id="form">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email-input">Email</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email-input" type="email" placeholder="Enter your email" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password-input">Password</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password-input" type="password" placeholder="Enter your password" required>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-pink-500 hover:bg-yellow-300 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Login
+                </button>
+            </div>
+        </form>
+        <p class="mt-4">New here? <a href="http://127.0.0.1:5000/" class="text-pink-800 hover: hover:bg-yellow-300 ">Signup</a></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('form');
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('password-input');
+        const errorMessage = document.getElementById('error-message');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userFound = users.find(user => user.email === email && user.password === password);
+
+            // Display error message if user not found
+            if (!userFound) {
+                errorMessage.innerHTML = 'User  not found. Please sign up first.';
+                emailInput.classList.add(' incorrect'); // Highlight email input
+                passwordInput.classList.add('incorrect'); // Highlight password input
+            } else {
+                errorMessage.innerHTML = ''; // Clear error messages
+                successMessage.innerHTML = 'Login successful! Redirecting to index page...';
+                // Redirect to the index.html page
+
+
+                
+                setTimeout(() => {
+                    window.location.href = 'http://127.0.0.1:5000/inbox'; // Change this to the correct path if needed
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
