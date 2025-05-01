@@ -27,7 +27,7 @@ logging.basicConfig(filename='app.log', level=logging.INFO)
 conn = psycopg2.connect(
     dbname=os.getenv('DB_NAME', 'gum_chat'),
     user=os.getenv('DB_USER', 'postgres'),
-    password=os.getenv('DB_PASSWORD', 'banshika'),
+    password=os.getenv('DB_PASSWORD', 'password'),
     host=os.getenv('DB_HOST', 'localhost'),
     port=os.getenv('DB_PORT', '5432')
 )
