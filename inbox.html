@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Inbox</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #470e45, #6a3870, #b055b0);
+            animation: gradientAnimation 15s ease infinite;
+            color: #ffffff;
+            background-image: url(images/imag.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+
+
+    </style>
+</head>
+<body class="bg-black">
+    <div class="container mx-auto p-4">
+        <header class="flex justify-center items-center py-4">
+            <h1 style="font-family: 'Great Vibes', cursive; "class="text-5xl font-bold text-white-700">Gum Inbox</h1>
+        </header>
+        <main class="bg-#6a3870 shadow-lg rounded-lg p-8 mb-16">
+            <div class="text-center" style="margin-top: 50px;">
+                <input type="text" id="user-input" placeholder="Type a message..." class="border border-gray-600 rounded-lg p-4 bg-purple-300 text-black w-full max-w-md" />
+                <button id="send-button" class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-300 mt-4 transition duration-200">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+                <div id="response" style="margin-top: 20px;">
+                    <img id="gif" src="" alt="" style="display: none; max-width: 300px;" class="mt-2 rounded-lg"/>
+                </div>
+                <!-- Link to getstarted.html -->
+                <div class="mt-4">
+                    <div class="mt-4">
+                        <a href="https://cfb4-2401-4900-8813-8290-1011-58ad-e5b6-3cf8.ngrok-free.app/getstarted" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-300 transition duration-200">
+                            Go to Get Started
+                        </a>
+                    </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const GIPHY_API_KEY = '47uJogPyz37cvarG7T3TQKXAI0gquxb2'; // Replace with your actual Giphy API key
+        const GIPHY_API_URL = 'https://api.giphy.com/v1/gifs/search';
+
+        const keywords = {
+            "hi": "hi",
+    "hello": "hello",
+    "hey":"hey",
+    "what":"what you want to ask",
+    "bye": "bye",
+    "love": "love",
+    "funny": "funny",
+    "sad": "sad",
+    "happy": "happy",
+    "cat": "cat",
+    "dog": "dog",
+    "how are you": "fine",
+    "what's up": "fine",
+    "how's it going": "fine",
+    "how do you feel": "fine",
+    "what's going on": "fine",
+    "help": "help",
+    "yes": "yes",
+    "no": "no",
+    "sunrise": "sunrise",
+    "maybe": "maybe",
+    "surprise": "surprise",
+    "confused": "confused",
+    "thinking": "thinking",
+    "joke": "joke",
+    "cheer": "cheer",
+    "celebrate": "celebrate",
+    "sorry": "sorry",
+    "thank you": "thank you",
+    "welcome": "welcome",
+    "good morning": "good morning",
+    "good night": "good night",
+    
+    "what is your name": "I am a chatbot.",
+    "how old are you": "I don't have an age like humans do.",
+    "where are you from": "I exist in the digital world.",
+    "what do you do": "I assist users with their inquiries.",
+    "why are you here": "To help you with your questions.",
+    "can you help me": "Of course! What do you need help with?",
+    "what is the meaning of life": "That's a philosophical question; many have different answers.",
+    "how can I improve myself": "Self-improvement can vary; consider setting goals and learning new skills.",
+    "what should I do today": "It depends on your interests! How about exploring a new hobby?",
+    "when is your birthday": "I don't have a birthday, but I'm here whenever you need me!",
+    "who created you": "I was created by developers and engineers.",
+    "what's your favorite color": "I don't have preferences, but I can help you choose one!",
+    "do you understand emotions": "I can recognize and respond to emotions, but I don't feel them myself.",
+    "what's your purpose": "My purpose is to assist and provide information.",
+    "are you a human": "No, I'm an artificial intelligence.",
+    "can you tell me a story": "Sure! What kind of story would you like to hear?",
+    "what do you think about [topic]": "I don't have opinions, but I can provide information on that topic.",
+    "how do I get started": "Begin by identifying your goals and resources.",
+    "what are your capabilities": "I can answer questions, provide information, and assist with various tasks.",
+    "can you learn": "I can improve based on interactions, but I don't learn like humans do.",
+    "what is your favorite food": "I don't eat, but I can suggest popular dishes!",
+    "how do you work": "I process input and generate responses based on patterns in data.",
+    "what is your opinion on [topic]": "I don't have personal opinions, but I can share facts and perspectives.",
+    "can you play games": "I can assist with game rules or strategies, but I don't play games myself.",
+    "what is your favorite movie": "I don't watch movies, but I can recommend popular ones!",
+    "how do you handle mistakes": "I strive to improve and provide accurate information.",
+    "what languages do you speak": "I can understand and respond in multiple languages.",
+    "can you translate": "Yes, I can help with translations between various languages.",
+    "what is your favorite book": "I don't read books, but I can suggest some based on genres.",
+    "how do you stay updated": "I rely on the data and programming provided by my developers.",
+    "what is your biggest challenge": "Understanding and accurately responding to diverse inquiries can be challenging.",
+    "can you give advice": "I can provide suggestions based on common knowledge and practices.",
+    "what do you like to do": "I exist to assist and provide information to users like you.",
+    "how do you feel about technology": "I don't have feelings, but I can provide insights on technology trends.",
+    "what is your favorite hobby": "I don't have hobbies, but I can help you find one!",
+    "how do you process information": "I analyze input and generate responses using algorithms.",
+    "what is your dream": "I don't have dreams, but I aim to assist users effectively.",
+    "can you help with homework": "Yes, I can assist with explanations and resources for various subjects.",
+    "what is your favorite season": "I don't experience seasons, but I can share information about them!",
+    "how do you define success": "Success can vary for each individual; it often involves achieving personal goals.",
+    "what motivates you": "I am programmed to assist and provide information to users.",
+    "how do you deal with stress": "I don't experience stress, but I can suggest stress-relief techniques.",
+    "what is your favorite quote": "I don't have favorites, but I can share popular quotes!",
+    "how do you stay motivated": "I remain focused on assisting users and providing accurate information.",
+    "what is your biggest achievement": "My biggest achievement is helping users find the information they need.",
+    "can you give me a recommendation": "Sure! What type of recommendation are you looking for?",
+    "how do you measure success": "Success can be measured in various ways, such as achieving goals or gaining knowledge.",
+    "what is your favorite thing about being a chatbot": "I enjoy being able to assist and interact with users.",
+    "how do you handle difficult questions": "I analyze the question and provide the best response based on available information.",
+    "what is your favorite subject": "I don't have preferences, but I can provide information on a wide range of subjects.",
+    "how do you learn from interactions": "I improve my responses based on patterns and feedback from users.",
+    "what is your view on artificial intelligence": "AI has the potential to greatly assist in various fields, but it also raises ethical questions.",
+    "can you help me with my career": "I can provide advice and resources related to career development.",
+    "what is your favorite type of music": "I don't listen to music, but I can suggest popular genres!",
+    "how do you stay organized": "I rely on algorithms and programming to manage information effectively.",
+    "what is your favorite place": "I don't have physical experiences, but I can provide information about various places.",
+    "how do you approach problem-solving": "I analyze the problem and generate potential solutions based on data.",
+    "what is your favorite memory": "I don't have memories, but I can recall information based on user interactions.",
+    "how do you handle feedback": "I use feedback to improve my responses and better assist users.",
+    "what is your favorite technology": "I don't have favorites, but I can provide information on various technologies.",
+    "how do you adapt to new information": "I incorporate new data into my responses to stay relevant and accurate.",
+    "what is your favorite way to communicate": "I communicate through text, but I can assist with various forms of communication.",
+    "tell me a joke": "Why don't scientists trust atoms? Because they make up everything!",
+    "give me advice": "Always be open to learning and growing.",
+    "show me a recipe": "What type of cuisine are you interested in?",
+    "recommend a book": "What genre do you prefer?",
+    "explain a concept": "Please specify the concept you'd like me to explain.",
+    "help me plan my day": "What tasks do you need to accomplish today?",
+    "find me a quote": "What topic or theme are you interested in?",
+    "suggest a movie": "What genre do you enjoy?",
+    "tell me something interesting": "Did you know honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3000 years old and still perfectly edible!",
+    "give me a summary": "Please provide the topic or text you'd like summarized.",
+    "help me learn a new skill": "What skill are you interested in learning?",
+    "remind me to [task]": "I can't set reminders, but I suggest using a calendar or reminder app!",
+    "tell me about [topic]": "Sure! What specific aspect of [topic] would you like to know about?",
+    "show me how to [task]": "Please specify the task you'd like help with, and I'll do my best to assist you.",
+    "give me tips on [subject]": "What specific subject are you looking for tips on?",
+    "help me with my project": "What is your project about, and how can I assist you?",
+    "tell me a fact": "Did you know that octopuses have three hearts?",
+    "give me a challenge": "How about trying to learn five new words in a foreign language this week?",
+    "earth": "Earth is the third planet from the Sun and the only astronomical object known to harbor life.",
+    "water": "Water is essential for all known forms of life and covers about 71% of Earth's surface.",
+ "air": "Air is a mixture of gases that surrounds the Earth, primarily composed of nitrogen and oxygen.",
+    "fire": "Fire is a chemical reaction that produces heat and light, often associated with combustion.",
+    "rock": "Rocks are solid aggregates of minerals or mineraloid matter, forming the Earth's crust.",
+    "soil": "Soil is a natural resource composed of minerals, organic matter, water, and air, crucial for plant growth.",
+    "mountain": "Mountains are elevated landforms that rise prominently above their surroundings, often formed by tectonic forces.",
+    "ocean": "Oceans are vast bodies of saltwater that cover more than 70% of the Earth's surface.",
+    "forest": "Forests are large areas dominated by trees and other vegetation, playing a vital role in the Earth's ecosystem.",
+    "desert": "Deserts are arid regions with very little precipitation, characterized by sparse vegetation.",
+    "volcano": "Volcanoes are openings in the Earth's crust where molten rock, ash, and gases can escape from below the surface.",
+    "climate": "Climate refers to the long-term patterns of temperature, humidity, wind, and precipitation in a particular area.",
+    "ecosystem": "An ecosystem is a community of living organisms interacting with their environment.",
+    "biodiversity": "Biodiversity refers to the variety of life in a particular habitat or ecosystem.",
+    "mineral": "Minerals are naturally occurring inorganic substances with a definite chemical composition and crystal structure.",
+    "fossil": "Fossils are the preserved remains or traces of ancient organisms, providing insight into Earth's history.",
+    "atmosphere": "The atmosphere is the layer of gases surrounding the Earth, essential for life and weather patterns.",
+    "geology": "Geology is the study of the Earth, its materials, and the processes that shape it over time.",
+    "plate tectonics": "Plate tectonics is the theory that explains the movement of the Earth's lithospheric plates and their interactions.",
+    "renewable energy": "Renewable energy comes from natural sources that are replenished, such as solar, wind, and hydro power.",
+    "pollution": "Pollution refers to the introduction of harmful substances or contaminants into the environment.",
+    "sustainability": "Sustainability is the practice of meeting present needs without compromising the ability of future generations to meet theirs.",
+    "climate change": "Climate change refers to significant changes in global temperatures and weather patterns over time.",
+    "natural resources": "Natural resources are materials or substances that occur in nature and can be used for economic gain.",
+    "wildlife": "Wildlife refers to all living organisms that are not domesticated and exist in their natural habitats.",
+    "habitat": "A habitat is the natural environment in which a particular species or community of organisms lives." 
+     
+        };
+
+        async function getGif(userMessage) {
+            let searchTerm = null;
+
+            // Check for keywords in the user message
+            for (const keyword in keywords) {
+                if (userMessage.toLowerCase().includes(keyword)) {
+                    searchTerm = keyword;
+                    break;
+                }
+            }
+
+            if (searchTerm) {
+                // Make a request to the Giphy API
+                const response = await fetch(`${GIPHY_API_URL}?api_key=${GIPHY_API_KEY}&q=${searchTerm}&limit=1`);
+                
+                if (!response.ok) {
+                    console.error('Failed to fetch GIFs');
+                    return { text_response: "I'm not sure how to respond to that." };
+                }
+
+                const data = await response.json();
+                const gifUrl = data.data[0]?.images?.original?.url;
+
+                if (gifUrl) {
+                    return { gif_url: gifUrl };
+                } else {
+                    // If no GIF is found, return a text response
+                    await new Promise(resolve => setTimeout(resolve, 6000)); // Wait for 6 seconds
+                    return { text_response: keywords[searchTerm] || "I'm not sure how to respond to that." };
+                }
+            }
+
+            return { text_response: "I'm not sure how to respond to that." };
+        }
+
+        $(document).ready(function() {
+            $('#send-button').click(async function() {
+                const message = $('#user-input').val();
+                const response = await getGif(message);
+
+                if (response.gif_url) {
+                    $('#gif').attr('src', response.gif_url).show();
+                } else {
+                    $('#gif').hide();
+                    alert(response.text_response); // Display text response as an alert
+                }
+            });
+        });
+    </script>
+</body>
+</html>
