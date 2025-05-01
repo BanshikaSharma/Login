@@ -1,6 +1,5 @@
 
-### Loom video Link : https://www.loom.com/share/49ea74883efd435c97ab3ea9f23e9cc1?sid=ae469fb8-7daa-4bf2-8059-ac4472764ed8
-
+### Loom video Link : https://www.loom.com/share/388a5cb6412e470d97ae9eb3ff8e9122?sid=f51adae0-902a-4d59-bc4d-c9fd27b4f34e
 # Login and Signup Project
 
 This is a simple web application built using **Flask** for handling **login** and **signup** functionality. It integrates with **PostgreSQL** for user data storage and uses **Tailwind CSS** for responsive and beautiful UI.
